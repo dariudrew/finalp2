@@ -3,21 +3,25 @@ import br.ufal.ic.p2.jackut.modelo.sistemaControle.SistemaUsuario;
 import br.ufal.ic.p2.jackut.modelo.exception.AtributoNaoPreenchidoException;
 import br.ufal.ic.p2.jackut.modelo.exception.LoginJaExisteException;
 import br.ufal.ic.p2.jackut.modelo.exception.LoginSenhaInvalidosException;
+import br.ufal.ic.p2.jackut.modelo.exception.NaoHaRecadoException;
+import br.ufal.ic.p2.jackut.modelo.exception.RecadoAhSiMesmoException;
 import br.ufal.ic.p2.jackut.modelo.exception.LoginInvalidoException;
 import br.ufal.ic.p2.jackut.modelo.exception.SenhaInvalidaException;
 import br.ufal.ic.p2.jackut.modelo.exception.UsuarioAddaSiMesmoException;
 import br.ufal.ic.p2.jackut.modelo.exception.UsuarioAdicionadoEsperandoAceitarException;
 import br.ufal.ic.p2.jackut.modelo.exception.UsuarioJaEhAmigoException;
 import br.ufal.ic.p2.jackut.modelo.exception.UsuarioNaoCadastradoException;
-import br.ufal.ic.p2.jackut.modelo.sistemaControle.SistemaDados;
+import br.ufal.ic.p2.jackut.modelo.sistemaControle.*;
 
 public class Facade {
 private SistemaDados dados;
 private SistemaUsuario sistemaUsuario;
+private SistemaConversa sistemaConversa;
 
 public Facade(){
     dados = new SistemaDados();
     sistemaUsuario = new SistemaUsuario(dados);
+    sistemaConversa = new SistemaConversa(dados);
 
 }
 
@@ -50,6 +54,12 @@ public boolean ehAmigo(String login, String amigo) throws AtributoNaoPreenchidoE
 }
 public String getAmigos(String login) throws LoginInvalidoException, AtributoNaoPreenchidoException{
     return sistemaUsuario.getAmigos(login);
+}
+public void enviarRecado(String id, String destino, String mensagem) throws AtributoNaoPreenchidoException, UsuarioNaoCadastradoException, RecadoAhSiMesmoException{
+    sistemaConversa.enviarRecado(id, destino, mensagem);
+}
+public String lerRecado(String id) throws UsuarioNaoCadastradoException, NaoHaRecadoException{
+    return sistemaConversa.lerRecado(id);
 }
 
 

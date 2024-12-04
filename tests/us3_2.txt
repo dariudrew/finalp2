@@ -15,4 +15,3 @@ expect {jpsauve,jdoe} getAmigos login=oabath
 
 
 encerrarSistema
-quit

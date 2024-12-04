@@ -1,5 +1,8 @@
 package br.ufal.ic.p2.jackut.modelo.usuario;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Usuario {
     private String login;
     private String senha;
@@ -18,6 +21,7 @@ public class Usuario {
     private String amigos;
     private String solicitacoesRecebidas;
     private String solicitacoesEnviadas;
+    private List<String> recados;
 
     public Usuario (int ID, String login, String senha, String nome){
         this.login = login;
@@ -37,6 +41,7 @@ public class Usuario {
         this.amigos = "{}";
         this.solicitacoesRecebidas = "{}";
         this.solicitacoesEnviadas = "{}";
+        this.recados = new ArrayList<>();
 
     }
 
@@ -91,6 +96,13 @@ public class Usuario {
     public String getSolicitacoesEnviadas(){
         return solicitacoesEnviadas;
     }
+    public List<String> getRecados(){
+        return recados;
+    }
+
+
+
+ // ============= funcoes set ================ 
 
     public void setNome(String nome){
         this.nome = nome;
@@ -133,6 +145,9 @@ public class Usuario {
     }
     public void setSolicitacoesEnviadas(String solicitacoesEnviadas){
         this.solicitacoesEnviadas = solicitacoesEnviadas;
+    }
+    public void setRecados(List<String> recado){
+        this.recados = recado;
     }
 
 

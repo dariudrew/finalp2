@@ -84,4 +84,3 @@ enviarRecado id=${id3} destinatario=jpsauve recado="Recado de John para Jacques"
 
 
 encerrarSistema
-quit

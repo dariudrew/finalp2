@@ -66,30 +66,29 @@ adicionarAmigo id=${id1} amigo=jdoe
 adicionarAmigo id=${id2} amigo=jdoe
 
 
-#expect true ehAmigo login=jdoe amigo=oabath
-#expect true ehAmigo login=jdoe amigo=jpsauve
-#expect true ehAmigo login=oabath amigo=jdoe
-#expect true ehAmigo login=jpsauve amigo=jdoe
+expect true ehAmigo login=jdoe amigo=oabath
+expect true ehAmigo login=jdoe amigo=jpsauve
+expect true ehAmigo login=oabath amigo=jdoe
+expect true ehAmigo login=jpsauve amigo=jdoe
 
 
-#expect {jpsauve,oabath} getAmigos login=jdoe
-#expect {oabath,jdoe} getAmigos login=jpsauve
-#expect {jpsauve,jdoe} getAmigos login=oabath
+expect {jpsauve,oabath} getAmigos login=jdoe
+expect {oabath,jdoe} getAmigos login=jpsauve
+expect {jpsauve,jdoe} getAmigos login=oabath
 
 
 # Tratamento de erros de adição de amigos
 
 
-#expectError "Usuário já está adicionado como amigo." adicionarAmigo id=${id1} amigo=oabath
-#expectError "Usuário já está adicionado como amigo." adicionarAmigo id=${id2} amigo=jpsauve
+expectError "Usuário já está adicionado como amigo." adicionarAmigo id=${id1} amigo=oabath
+expectError "Usuário já está adicionado como amigo." adicionarAmigo id=${id2} amigo=jpsauve
 
 
-#expectError "Usuário não cadastrado." adicionarAmigo id=${id1} amigo=qwerty
-#expectError "Usuário não cadastrado." adicionarAmigo id=${idx} amigo=jpsauve
+expectError "Usuário não cadastrado." adicionarAmigo id=${id1} amigo=qwerty
+expectError "Usuário não cadastrado." adicionarAmigo id=${idx} amigo=jpsauve
 
 
-#expectError "Usuário não pode adicionar a si mesmo como amigo." adicionarAmigo id=${id1} amigo=jpsauve
+expectError "Usuário não pode adicionar a si mesmo como amigo." adicionarAmigo id=${id1} amigo=jpsauve
 
 
 encerrarSistema
-quit
