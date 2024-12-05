@@ -1,6 +1,7 @@
 package br.ufal.ic.p2.jackut.modelo.sistemaControle;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import br.ufal.ic.p2.jackut.modelo.comunidade.Comunidade;
 import br.ufal.ic.p2.jackut.modelo.exception.AtributoNaoPreenchidoException;
@@ -161,21 +162,26 @@ public class SistemaComunidade {
         String membrosDaComunidade = comunidade.getMembros();
         membrosDaComunidade = membrosDaComunidade.replaceAll("^\\{", "").replaceAll("\\}$", "");
         Usuario usuario;
+        //List<String> mensagens;
         if(membrosDaComunidade.contains(",")){
             String[] membrosArray = membrosDaComunidade.split(",");
             
             for(String membro: membrosArray){
                 usuario = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(membro));
+               // mensagens = usuario.getMensagens();
+               // mensagens.add(mensagem);
                 usuario.setMensagens(mensagem);
-                System.out.println(usuario.getLogin()+" RECEBEU A MSG: "+mensagem+" na comunidade: "+comunidade.getNomeComunidade());
+                //System.out.println(usuario.getLogin()+" RECEBEU A MSG: "+mensagem+" na comunidade: "+comunidade.getNomeComunidade());
 
 
             }
         }
         else{
             usuario = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(membrosDaComunidade));
+            //mensagens = usuario.getMensagens();
+            //mensagens.add(mensagem);
             usuario.setMensagens(mensagem);
-            System.out.println(usuario.getLogin()+" RECEBEU A MSG: "+mensagem+" na comunidade: "+comunidade.getNomeComunidade());
+            //System.out.println(usuario.getLogin()+" RECEBEU A MSG: "+mensagem+" na comunidade: "+comunidade.getNomeComunidade());
         }
     }
     public String lerMensagem(String id) throws UsuarioNaoCadastradoException, AtributoNaoPreenchidoException, NaoHaMensagemException{
@@ -186,10 +192,19 @@ public class SistemaComunidade {
             throw new UsuarioNaoCadastradoException();
         }
         Usuario usuario = dados.usuariosPorID.get(Integer.valueOf(id));
-        if(dados.validaNome(usuario.getMensagens())){
+        String mensagem = usuario.getMensagens();
+        /*if(Integer.valueOf(id) == 1){
+            for(String e: mensagens){
+            System.out.println("VAMOS PRINTAR AS MENSAGENS: ");
+            System.out.println(e);
+            }
+        }*/
+        
+        if(mensagem.equals("{}")){
             throw new NaoHaMensagemException();
         }
-        return usuario.getMensagens();
+        
+        return mensagem;
         
        
     }

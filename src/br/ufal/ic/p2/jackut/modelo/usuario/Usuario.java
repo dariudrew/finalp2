@@ -114,18 +114,21 @@ public class Usuario {
         str = str.replaceFirst(",$","").concat("}");
         return str;
     }
-    public String getMensagens(){
-        String str = "";
-        if(!mensagens.isEmpty()){
-            str = mensagens.get(0);
-            System.out.println("TESTE DE STR: "+str);
-            mensagens.remove(0); 
+    /*public List<String> getMensagens(){
+        if(mensagens.isEmpty()){
+            System.out.println("TA VAZIO ESSA POHA");
         }
-        System.out.println("TESTE DE STR final: "+str);
+        return mensagens;
+    }*/
+    public String getMensagens(){
+        if(mensagens.isEmpty()){
+            System.out.println("TA VAZIO ESSA POHA");
+            return "{}";
+        }
+        String str = mensagens.get(0);
+        mensagens.remove(0);
         return str;
-
     }
-
 
 
  // ============= funcoes set ================ 
@@ -178,8 +181,8 @@ public class Usuario {
     public void setComunidades(String comunidade){
         this.comunidades.add(comunidade);
     }
-    public void setMensagens(String mensagem){
-        this.mensagens.add(mensagem);
+    public void setMensagens(String mensagens){
+        this.mensagens.add(mensagens);
     }
 
 
