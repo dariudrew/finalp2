@@ -54,4 +54,3 @@ expectError "Comunidade não existe." getMembrosComunidade nome="UFCG3"
 
 
 encerrarSistema
-quit

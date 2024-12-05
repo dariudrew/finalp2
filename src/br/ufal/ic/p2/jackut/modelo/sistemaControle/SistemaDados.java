@@ -5,22 +5,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.ufal.ic.p2.jackut.modelo.usuario.Usuario;
+import br.ufal.ic.p2.jackut.modelo.comunidade.Comunidade;
 import br.ufal.ic.p2.jackut.modelo.exception.*;
 
 public class SistemaDados {
 
      int contadorID = 1;
+     int contadorIdComunidade = 1;
     
 
     Map<Integer, Usuario> usuariosPorID = new HashMap<>();
+    Map<Integer, Comunidade> comunidadesPorID = new HashMap<>();
 
 
     public void zerarSistema(){
-       while(!usuariosPorID.isEmpty()){
-            usuariosPorID.remove(contadorID);
-            contadorID--;
-       }
+    
+        usuariosPorID.clear();
+        comunidadesPorID.clear();
+        
         contadorID = 1;
+        contadorIdComunidade = 1;
     }
     protected void validaDados(String login, String senha) throws LoginInvalidoException, SenhaInvalidaException{
         if(validaNome(login)){

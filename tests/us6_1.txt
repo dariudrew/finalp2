@@ -58,4 +58,3 @@ expectError "Usuário não cadastrado." getComunidades sessao=${s3}
 
 
 encerrarSistema
-quit

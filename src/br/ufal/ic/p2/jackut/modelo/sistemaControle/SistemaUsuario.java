@@ -199,16 +199,12 @@ if (dados.usuariosPorID.containsKey(ID)) {
     }
     
     public String getAmigos(String login) throws LoginInvalidoException, AtributoNaoPreenchidoException{
-        //System.out.println("============================ FUNCAO GET AMIGO ===========================");
-        //System.out.println("");
         if(dados.validaNome(login)){
             throw new LoginInvalidoException();
         }
         ID = getIdUsuario(login);
         Usuario usuario = dados.usuariosPorID.get(ID);
-      //  System.out.println("LISTA DE AMIGOS: "+usuario.getAmigos());
-       // System.out.println("");
-      //  System.out.println("============================ FIM FUNCAO GET AMIGO ===========================");
+    
         return usuario.getAmigos();
     }
 
@@ -236,32 +232,24 @@ if (dados.usuariosPorID.containsKey(ID)) {
     }
     
     private boolean verificaAmizade(String listaAmigos, String amigo) throws LoginInvalidoException, AtributoNaoPreenchidoException{
-       // System.out.println("======  FUN플O VERIFICA AMIZADE ========");
-       // System.out.println("A LISTA CHEGOU ASSIM: "+listaAmigos);
         listaAmigos = listaAmigos.replaceAll("^\\{", "").replaceAll("\\}$", "");
-        //System.out.println("A LISTA apos chaves ASSIM: "+listaAmigos);
         if(listaAmigos.isEmpty()){
-           // System.out.println("====== vazia -  FIM DA FUN플O VERIFICA AMIZADE ========");
             return false;
         }
         if(listaAmigos.contains(",")){
     
             String[] listaAmigosArray = listaAmigos.split(",");
-           // System.out.println("A LISTA apos split ASSIM: ");
-            for(String s: listaAmigosArray){
-                //System.out.println(s);
-            }
+          
             for(String loginAmigo : listaAmigosArray){
                 if(loginAmigo.equals(amigo)){
-                  //  System.out.println("====== true FIM DA FUN플O VERIFICA AMIZADE ========");
+                 
                     return true;
                 }
             }
-           // System.out.println("====== false FIM DA FUN플O VERIFICA AMIZADE ========");
+          
         }
-       // System.out.println("A LISTA so tem um elemento ASSIM: "+listaAmigos);
+       
         if(listaAmigos.equals(amigo)){
-          //  System.out.println("====== true FIM DA FUN플O VERIFICA AMIZADE ========");
             return true;
         }
         
@@ -269,30 +257,22 @@ if (dados.usuariosPorID.containsKey(ID)) {
     }
     
     private String atualizarAmigos(String listaAmigos, String amigo){
-      //  System.out.println("======  FUN플O ATT AMIGO ========");
-       // System.out.println("LISTA CHEGOU ASSSIM: "+listaAmigos);
         if(listaAmigos.equals("{}")){
             listaAmigos = listaAmigos.replaceAll("\\}$", amigo+"}");
-           // System.out.println("LISTA apos o 1 if ASSSIM: "+listaAmigos);
         }
         else{
             listaAmigos = listaAmigos.replaceAll("\\}$",","+amigo+"}");
-           // System.out.println("LISTA apos o else ASSSIM: "+listaAmigos);
         }
-        //System.out.println("LISTA final ASSSIM: "+listaAmigos);
-       // System.out.println("====== FIM da FUN플O ATT AMIGO ========");
+   
         return listaAmigos;
         
     }
     
     private String atualizarSolicitacoes(String solicitacoes, String amigo){
-        //System.out.println("======  FUN플O ATT SOLICITACOES ========");
         solicitacoes = solicitacoes.replaceAll("^\\{", "").replaceAll("\\}$", "");
-       // System.out.println("SOLICITACOES APOS CHAVES: "+solicitacoes);
         String solicitacoesAtualizada = "{}";
         if(solicitacoes.contains(",")){
             String[] solicitacoessArray = solicitacoes.split(",");
-           // System.out.println("SOLICITACOES APOS split: "+solicitacoessArray);
             for(String loginAmigo : solicitacoessArray){
                 if(loginAmigo.equals(amigo)){
                     continue;
@@ -303,13 +283,12 @@ if (dados.usuariosPorID.containsKey(ID)) {
                 solicitacoesAtualizada = solicitacoesAtualizada.concat(loginAmigo).concat(",");
                 
             }
-           // System.out.println("A NOVA VARIAVEL SOLICITACOES APOS EXCLUIR O AMIGO: "+solicitacoesAtualizada);
+
             solicitacoesAtualizada = "{".concat(solicitacoesAtualizada.replaceAll(",$", "}"));
-           // System.out.println("A NOVA VARIAVEL SOLICITACOES APOS add chaves: "+solicitacoesAtualizada);
+           
         }
         
-        
-       // System.out.println("======  FIM da claerFUN플O ATT SOLICITACOES ========");
         return solicitacoesAtualizada;
     }
+    
 }

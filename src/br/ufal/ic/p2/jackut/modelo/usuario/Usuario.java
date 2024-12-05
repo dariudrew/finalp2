@@ -22,6 +22,8 @@ public class Usuario {
     private String solicitacoesRecebidas;
     private String solicitacoesEnviadas;
     private List<String> recados;
+    private List<String> comunidades;
+    private List<String> mensagens;
 
     public Usuario (int ID, String login, String senha, String nome){
         this.login = login;
@@ -42,6 +44,8 @@ public class Usuario {
         this.solicitacoesRecebidas = "{}";
         this.solicitacoesEnviadas = "{}";
         this.recados = new ArrayList<>();
+        this.comunidades = new ArrayList<>();
+        this.mensagens = new ArrayList<>();
 
     }
 
@@ -99,6 +103,28 @@ public class Usuario {
     public List<String> getRecados(){
         return recados;
     }
+    public String getComunidades(){       
+        if(comunidades.isEmpty()){
+            return "{}";
+        } 
+        String str = "{";
+        for(String comunidade : comunidades){
+            str = str.concat(comunidade).concat(",");
+        }
+        str = str.replaceFirst(",$","").concat("}");
+        return str;
+    }
+    public String getMensagens(){
+        String str = "";
+        if(!mensagens.isEmpty()){
+            str = mensagens.get(0);
+            System.out.println("TESTE DE STR: "+str);
+            mensagens.remove(0); 
+        }
+        System.out.println("TESTE DE STR final: "+str);
+        return str;
+
+    }
 
 
 
@@ -148,6 +174,12 @@ public class Usuario {
     }
     public void setRecados(List<String> recado){
         this.recados = recado;
+    }
+    public void setComunidades(String comunidade){
+        this.comunidades.add(comunidade);
+    }
+    public void setMensagens(String mensagem){
+        this.mensagens.add(mensagem);
     }
 
 
