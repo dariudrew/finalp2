@@ -1,9 +1,15 @@
 package br.ufal.ic.p2.jackut.modelo.xml;
 
+import br.ufal.ic.p2.jackut.modelo.comunidade.Comunidade;
 import br.ufal.ic.p2.jackut.modelo.usuario.Perfil;
 import br.ufal.ic.p2.jackut.modelo.usuario.Relacionamentos;
 import br.ufal.ic.p2.jackut.modelo.usuario.Usuario;
 import org.w3c.dom.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,7 +24,7 @@ public class XML {
 
     private final String arquivoNome = "arquivo.xml";
 
-    // 1. Carrega ou cria um arquivo XML
+    
     public Document carregarOuCriarXML() {
         try {
             File arquivo = new File(arquivoNome);
@@ -60,7 +66,7 @@ public class XML {
         }
     }
 
-    // 2. Insere um novo usuário no XML
+ 
     public void inserirUsuario(Usuario usuario) {
         Document document = carregarOuCriarXML();
         if (document == null) return;
@@ -105,7 +111,7 @@ public class XML {
         salvarXML(document);
     }
 
-    // 3. Edita um usuário existente no XML
+   
     public void editarUsuario(Usuario usuario) {
         Perfil perfil = usuario.getPerfil();
         Relacionamentos relacionamento = usuario.getRelacionamentos();
@@ -116,7 +122,7 @@ public class XML {
         for (int i = 0; i < usuarios.getLength(); i++) {
             Element usuarioElement = (Element) usuarios.item(i);
             if (usuarioElement.getAttribute("id").equals(String.valueOf(usuario.getID()))) {
-                // Atualiza os atributos do usuário
+                
                 atualizarElemento(document, usuarioElement, "nome", usuario.getNome());
                 atualizarElemento(document, usuarioElement, "descricao", perfil.getDescricao());
                 atualizarElemento(document, usuarioElement, "estadoCivil", perfil.getEstadoCivil());
@@ -144,8 +150,86 @@ public class XML {
             }
         }
     }
+// Método para inserir uma nova comunidade
+public void inserirComunidade(Comunidade comunidade) {
+    Document document = carregarOuCriarXML();
+    if (document == null) return;
 
-    // 4. Apaga todo o conteúdo do arquivo XML
+    // Verifica se a tag <comunidades> existe no XML
+    NodeList comunidadeTags = document.getElementsByTagName("comunidades");
+    Element comunidadesElement;
+
+    if (comunidadeTags.getLength() == 0) {
+        // Cria a tag <comunidades> se não existir
+        comunidadesElement = document.createElement("comunidades");
+        document.getDocumentElement().appendChild(comunidadesElement);
+    } else {
+        comunidadesElement = (Element) comunidadeTags.item(0);
+    }
+
+    // Cria o elemento <comunidade>
+    Element comunidadeElement = document.createElement("comunidade");
+    comunidadeElement.setAttribute("id", String.valueOf(comunidade.getID()));
+
+    // Adiciona os atributos da comunidade
+    comunidadeElement.appendChild(criarElemento(document, "nome", comunidade.getNomeComunidade()));
+    comunidadeElement.appendChild(criarElemento(document, "descricao", comunidade.getDescricaoComunidade()));
+    comunidadeElement.appendChild(criarElemento(document, "dono", comunidade.getDonoComunidade()));
+
+    // Adiciona a lista de membros
+    Element membrosElement = document.createElement("membros");
+    String str = comunidade.getMembros().replaceAll("^\\{", "").replaceAll("\\}$", "");
+    String[] membrosArray = str.split(",");
+    for (String membro :membrosArray) {
+        membrosElement.appendChild(criarElemento(document, "membro", membro));
+    }
+    comunidadeElement.appendChild(membrosElement);
+
+    comunidadesElement.appendChild(comunidadeElement);
+    salvarXML(document);
+}
+
+// Método para editar uma comunidade existente
+public void editarComunidade(Comunidade comunidade) {
+    Document document = carregarOuCriarXML();
+    if (document == null) return;
+
+    NodeList comunidades = document.getElementsByTagName("comunidade");
+
+    for (int i = 0; i < comunidades.getLength(); i++) {
+        Element comunidadeElement = (Element) comunidades.item(i);
+
+        if (comunidadeElement.getAttribute("id").equals(String.valueOf(comunidade.getID()))) {
+            // Atualiza os atributos da comunidade
+            atualizarElemento(document, comunidadeElement, "nome", comunidade.getNomeComunidade());
+            atualizarElemento(document, comunidadeElement, "descricao", comunidade.getDescricaoComunidade());
+            atualizarElemento(document, comunidadeElement, "dono", comunidade.getDonoComunidade());
+
+            // Atualiza os membros da comunidade
+            NodeList membrosNodes = comunidadeElement.getElementsByTagName("membros");
+            if (membrosNodes.getLength() > 0) {
+                comunidadeElement.removeChild(membrosNodes.item(0));
+            }
+
+            Element membrosElement = document.createElement("membros");
+            String str = comunidade.getMembros().replaceAll("^\\{", "").replaceAll("\\}$", "");
+            String[] membrosArray = str.split(",");
+            for (String membro : membrosArray) {
+                
+                membrosElement.appendChild(criarElemento(document, "membro", membro));
+            }
+            comunidadeElement.appendChild(membrosElement);
+
+            salvarXML(document);
+            return;
+        }
+    }
+
+}
+
+    
+
+    
     public void apagarConteudo() {
         try {
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -161,7 +245,7 @@ public class XML {
         }
     }
 
-    // 5. Exclui um usuário específico pelo ID
+    
     public void excluirUsuario(int id) {
         Document document = carregarOuCriarXML();
         if (document == null) return;
@@ -193,4 +277,86 @@ public class XML {
             parent.appendChild(criarElemento(document, tagName, newValue));
         }
     }
+    
+public Map<Integer, Usuario> carregarUsuarios() {
+    Document document = carregarOuCriarXML();
+    if (document == null) return null;
+
+    Map<Integer, Usuario> usuariosMap = new HashMap<>();
+    NodeList usuariosNodes = document.getElementsByTagName("usuario");
+
+    for (int i = 0; i < usuariosNodes.getLength(); i++) {
+        Element usuarioElement = (Element) usuariosNodes.item(i);
+
+        // Lê os atributos do usuário
+        int id = Integer.parseInt(usuarioElement.getAttribute("id"));
+        String login = getTagValue(usuarioElement, "login");
+        String senha = getTagValue(usuarioElement, "senha");
+        String nome = getTagValue(usuarioElement, "nome");
+
+        // Cria o objeto Usuario
+        Usuario usuario = new Usuario(id, login, senha, nome);
+
+        // Preenche o Perfil, caso exista
+        Perfil perfil = usuario.getPerfil();
+        perfil.setDescricao(getTagValue(usuarioElement, "descricao"));
+        perfil.setEstadoCivil(getTagValue(usuarioElement, "estadoCivil"));
+        perfil.setAniversario(getTagValue(usuarioElement, "aniversario"));
+        perfil.setFilhos(getTagValue(usuarioElement, "filhos"));
+        perfil.setIdiomas(getTagValue(usuarioElement, "idiomas"));
+        perfil.setCidadeNatal(getTagValue(usuarioElement, "cidadeNatal"));
+        perfil.setEstilo(getTagValue(usuarioElement, "estilo"));
+        perfil.setFumo(getTagValue(usuarioElement, "fumo"));
+        perfil.setBebo(getTagValue(usuarioElement, "bebo"));
+        perfil.setMoro(getTagValue(usuarioElement, "moro"));
+
+        usuariosMap.put(id, usuario);
+    }
+
+    return usuariosMap;
+}
+
+public Map<Integer, Comunidade> carregarComunidades() {
+    Document document = carregarOuCriarXML();
+    if (document == null) return null;
+
+    Map<Integer, Comunidade> comunidadesMap = new HashMap<>();
+    NodeList comunidadesNodes = document.getElementsByTagName("comunidade");
+
+    for (int i = 0; i < comunidadesNodes.getLength(); i++) {
+        Element comunidadeElement = (Element) comunidadesNodes.item(i);
+
+        // Lê os atributos da comunidade
+        int id = Integer.parseInt(comunidadeElement.getAttribute("id"));
+        String nome = getTagValue(comunidadeElement, "nome");
+        String descricao = getTagValue(comunidadeElement, "descricao");
+        String dono = getTagValue(comunidadeElement, "dono");
+
+        // Lê os membros da comunidade
+        NodeList membrosNodes = comunidadeElement.getElementsByTagName("membro");
+        String membros = "{";
+        for (int j = 0; j < membrosNodes.getLength(); j++) {
+            membros.concat(membrosNodes.item(j).getTextContent()).concat(",");
+        }
+        membros = membros.replaceFirst(",$","").concat("}");
+
+
+        // Cria o objeto Comunidade
+        //Comunidade comunidade = new Comunidade(id, nome, descricao, dono, membros);
+        //comunidadesMap.put(id, comunidade);
+    }
+
+    return comunidadesMap;
+}
+
+// Método auxiliar para obter o valor de uma tag
+private String getTagValue(Element parent, String tagName) {
+    NodeList nodes = parent.getElementsByTagName(tagName);
+    if (nodes.getLength() > 0) {
+        return nodes.item(0).getTextContent();
+    }
+    return "";
+}
+
+
 }

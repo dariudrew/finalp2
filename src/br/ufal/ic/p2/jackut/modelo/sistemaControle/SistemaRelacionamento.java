@@ -71,13 +71,15 @@ public class SistemaRelacionamento {
         else if(ehInimigo(String.valueOf(sistemaUsuario.getIdUsuario(idolo)), usuario.getLogin())){
             throw new FuncaoInvalidaEhMeuInimigoException();
         }
-        //add aos idolos
+        
         Relacionamentos relacionamentos = usuario.getRelacionamentos();
         relacionamentos.setIdolos(idolo);
-
-        //agora o Idolo add aos fans
-        relacionamentos = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(idolo)).getRelacionamentos();
+        dados.xml.editarUsuario(usuario);
+       
+        Usuario usuario1 = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(idolo));
+        relacionamentos = usuario1.getRelacionamentos();
         relacionamentos.setFans(usuario.getLogin());
+        dados.xml.editarUsuario(usuario1);
 
     }
 
@@ -152,13 +154,16 @@ public class SistemaRelacionamento {
 
         Relacionamentos relacionamentos = usuario.getRelacionamentos();
         relacionamentos.setPaqueras(paquera);
+        dados.xml.editarUsuario(usuario);
         
 
         if(ehPaquera(id, paquera) && ehPaquera(String.valueOf(sistemaUsuario.getIdUsuario(paquera)), usuario.getLogin())){
             sistemaConversa.enviarRecado(id, paquera, usuario.getNome()+" é seu paquera - Recado do Jackut.");
+            dados.xml.editarUsuario(usuario);
             
            Usuario usuario1 = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(paquera));
             sistemaConversa.enviarRecado(String.valueOf(usuario1.getID()), usuario.getLogin(), usuario1.getNome()+" é seu paquera - Recado do Jackut.");
+            dados.xml.editarUsuario(usuario1);
         }
     }
 
@@ -176,6 +181,7 @@ public class SistemaRelacionamento {
 
         Relacionamentos relacionamentos = usuario.getRelacionamentos();
         relacionamentos.setInimigos(inimigo);
+        dados.xml.editarUsuario(usuario);
     }
     public boolean ehInimigo(String id, String inimigo){
 

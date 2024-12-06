@@ -14,11 +14,8 @@ public class SistemaDados {
      int contadorID = 1;
      int contadorIdComunidade = 1;
      public XML xml = new XML();
-    
-
     Map<Integer, Usuario> usuariosPorID = new HashMap<>();
     Map<Integer, Comunidade> comunidadesPorID = new HashMap<>();
-
 
     public void zerarSistema(){
     
@@ -27,7 +24,9 @@ public class SistemaDados {
         
         contadorID = 1;
         contadorIdComunidade = 1;
+        xml.apagarConteudo();
     }
+
     protected void validaDados(String login, String senha) throws LoginInvalidoException, SenhaInvalidaException{
         if(validaNome(login)){
             throw new LoginInvalidoException();
@@ -37,23 +36,11 @@ public class SistemaDados {
         }
         
     }
-    protected void validaCPF(String cpf){ //throws CPFInvalidoException 
-        if(cpf == null || cpf.isEmpty() || !cpf.matches("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$")){
-            //throw new CPFInvalidoException();
-        }
-    }
-
-    protected boolean validaEmail(String email) {
-        return email == null || email.isEmpty() || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
-    }
 
     protected boolean validaSenha(String senha) {
         return senha == null || senha.trim().isEmpty();
     }
 
-    protected boolean validaEndereco(String endereco){
-        return endereco == null || endereco.trim().isEmpty();
-    }
     protected boolean validaNome(String nome){
         return nome == null || nome.isEmpty() || nome.isBlank();
     }

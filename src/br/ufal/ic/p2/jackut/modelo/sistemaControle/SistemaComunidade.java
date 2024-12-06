@@ -36,9 +36,10 @@ public class SistemaComunidade {
         comunidade.setMembros(usuario.getLogin());
         relacionamentos.setComunidades(nomeComunidade);
         dados.comunidadesPorID.put(dados.contadorIdComunidade, comunidade);
+        
         dados.contadorIdComunidade++;
         dados.xml.editarUsuario(usuario);
-        //dados.xml.inserirComunidade(comunidade);
+        dados.xml.inserirComunidade(comunidade);
 
     }
     public String getDescricaoComunidade(String nomeComunidade) throws AtributoNaoPreenchidoException, ComunidadeNaoExisteException{
