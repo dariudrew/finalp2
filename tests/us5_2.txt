@@ -16,4 +16,3 @@ expect {oabath} getMembrosComunidade nome="Alunos da UFCG"
 
 
 encerrarSistema
-quit

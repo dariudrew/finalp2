@@ -1,7 +1,6 @@
 package br.ufal.ic.p2.jackut.modelo.sistemaControle;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import br.ufal.ic.p2.jackut.modelo.comunidade.Comunidade;
 import br.ufal.ic.p2.jackut.modelo.exception.AtributoNaoPreenchidoException;
@@ -11,6 +10,7 @@ import br.ufal.ic.p2.jackut.modelo.exception.LoginInvalidoException;
 import br.ufal.ic.p2.jackut.modelo.exception.NaoHaMensagemException;
 import br.ufal.ic.p2.jackut.modelo.exception.UsuarioFazParteComunidadeException;
 import br.ufal.ic.p2.jackut.modelo.exception.UsuarioNaoCadastradoException;
+import br.ufal.ic.p2.jackut.modelo.usuario.Relacionamentos;
 import br.ufal.ic.p2.jackut.modelo.usuario.Usuario;
 
 
@@ -24,7 +24,6 @@ public class SistemaComunidade {
         this.sistemaUsuario = new SistemaUsuario(dados);
     }
     public void criarComunidade(int id, String nomeComunidade, String descricaoComunidade) throws UsuarioNaoCadastradoException, ComunidadeJaExisteException{
-        //verificar se ja existe comunidade com o mesmo nome
         if(!dados.usuariosPorID.containsKey(id)){
             throw new UsuarioNaoCadastradoException();
         }
@@ -32,11 +31,14 @@ public class SistemaComunidade {
             throw new ComunidadeJaExisteException();
         }
         Usuario usuario = dados.usuariosPorID.get(id);
+        Relacionamentos relacionamentos = usuario.getRelacionamentos();
         Comunidade comunidade = new Comunidade(dados.contadorIdComunidade, usuario.getLogin(), nomeComunidade, descricaoComunidade);
         comunidade.setMembros(usuario.getLogin());
-        usuario.setComunidades(nomeComunidade);
+        relacionamentos.setComunidades(nomeComunidade);
         dados.comunidadesPorID.put(dados.contadorIdComunidade, comunidade);
         dados.contadorIdComunidade++;
+        dados.xml.editarUsuario(usuario);
+        //dados.xml.inserirComunidade(comunidade);
 
     }
     public String getDescricaoComunidade(String nomeComunidade) throws AtributoNaoPreenchidoException, ComunidadeNaoExisteException{
@@ -94,7 +96,6 @@ public class SistemaComunidade {
         return 0;
     }
     public void adicionarComunidade(String id, String nomeComunidade) throws UsuarioNaoCadastradoException, ComunidadeNaoExisteException, UsuarioFazParteComunidadeException, AtributoNaoPreenchidoException{
-        //usuario cadastrado?
         if(dados.validaNome(id)){
             throw new UsuarioNaoCadastradoException();
         }
@@ -105,13 +106,13 @@ public class SistemaComunidade {
             throw new ComunidadeNaoExisteException();
         }
        Usuario usuario = dados.usuariosPorID.get(Integer.valueOf(id));
+       Relacionamentos relacionamentos = usuario.getRelacionamentos();
         
-        //usuario ja faz parte?
         if(ehDaComunidade(Integer.valueOf(id), nomeComunidade)){
             throw new UsuarioFazParteComunidadeException();
         }
         Comunidade comunidade = dados.comunidadesPorID.get(getIdComunidade(nomeComunidade));
-        usuario.setComunidades(nomeComunidade);
+        relacionamentos.setComunidades(nomeComunidade);
         comunidade.setMembros(usuario.getLogin());
   
     }
@@ -126,13 +127,15 @@ public class SistemaComunidade {
             throw new UsuarioNaoCadastradoException();
         }
         Usuario usuario = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(login));
-        return usuario.getComunidades();
+        Relacionamentos relacionamentos = usuario.getRelacionamentos();
+        return relacionamentos.getComunidades();
     }
 
     private boolean ehDaComunidade(int id, String nomeComunidade){//usuario faz parte da comunidade?
 
         Usuario usuario = dados.usuariosPorID.get(id);
-        String comunidades = usuario.getComunidades();
+        Relacionamentos relacionamentos = usuario.getRelacionamentos();
+        String comunidades = relacionamentos.getComunidades();
         comunidades = comunidades.replaceAll("^\\{", "").replaceAll("\\}$", "");
 
         if(comunidades.contains(",")){
@@ -162,26 +165,20 @@ public class SistemaComunidade {
         String membrosDaComunidade = comunidade.getMembros();
         membrosDaComunidade = membrosDaComunidade.replaceAll("^\\{", "").replaceAll("\\}$", "");
         Usuario usuario;
-        //List<String> mensagens;
+        Relacionamentos relacionamentos;
         if(membrosDaComunidade.contains(",")){
             String[] membrosArray = membrosDaComunidade.split(",");
             
             for(String membro: membrosArray){
                 usuario = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(membro));
-               // mensagens = usuario.getMensagens();
-               // mensagens.add(mensagem);
-                usuario.setMensagens(mensagem);
-                //System.out.println(usuario.getLogin()+" RECEBEU A MSG: "+mensagem+" na comunidade: "+comunidade.getNomeComunidade());
-
-
+                relacionamentos = usuario.getRelacionamentos();             
+                relacionamentos.setMensagens(mensagem);
             }
         }
         else{
             usuario = dados.usuariosPorID.get(sistemaUsuario.getIdUsuario(membrosDaComunidade));
-            //mensagens = usuario.getMensagens();
-            //mensagens.add(mensagem);
-            usuario.setMensagens(mensagem);
-            //System.out.println(usuario.getLogin()+" RECEBEU A MSG: "+mensagem+" na comunidade: "+comunidade.getNomeComunidade());
+            relacionamentos = usuario.getRelacionamentos();
+            relacionamentos.setMensagens(mensagem);
         }
     }
     public String lerMensagem(String id) throws UsuarioNaoCadastradoException, AtributoNaoPreenchidoException, NaoHaMensagemException{
@@ -192,13 +189,8 @@ public class SistemaComunidade {
             throw new UsuarioNaoCadastradoException();
         }
         Usuario usuario = dados.usuariosPorID.get(Integer.valueOf(id));
-        String mensagem = usuario.getMensagens();
-        /*if(Integer.valueOf(id) == 1){
-            for(String e: mensagens){
-            System.out.println("VAMOS PRINTAR AS MENSAGENS: ");
-            System.out.println(e);
-            }
-        }*/
+        Relacionamentos relacionamentos = usuario.getRelacionamentos(); 
+        String mensagem = relacionamentos.getMensagens();    
         
         if(mensagem.equals("{}")){
             throw new NaoHaMensagemException();

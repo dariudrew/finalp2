@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.ufal.ic.p2.jackut.modelo.usuario.Usuario;
+import br.ufal.ic.p2.jackut.modelo.xml.XML;
 import br.ufal.ic.p2.jackut.modelo.comunidade.Comunidade;
 import br.ufal.ic.p2.jackut.modelo.exception.*;
 
@@ -12,6 +13,7 @@ public class SistemaDados {
 
      int contadorID = 1;
      int contadorIdComunidade = 1;
+     public XML xml = new XML();
     
 
     Map<Integer, Usuario> usuariosPorID = new HashMap<>();

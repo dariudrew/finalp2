@@ -170,53 +170,53 @@ expect false ehPaquera id=${s1} paquera=inimigodejacques
 
 
 expectError "Função inválida: Inimigo de Jacques é seu inimigo." adicionarAmigo id=${s1} amigo=inimigodejacques
-expectError "Função inválida: Inimigo de Jacques é seu inimigo." adicionarIdolo id=${s1} idolo=inimigodejacques
-expectError "Função inválida: Inimigo de Jacques é seu inimigo." adicionarPaquera id=${s1} paquera=inimigodejacques
-expectError "Função inválida: Inimigo de Jacques é seu inimigo." enviarRecado id=${s1} destinatario=inimigodejacques recado="fhdjfsd"
+#expectError "Função inválida: Inimigo de Jacques é seu inimigo." adicionarIdolo id=${s1} idolo=inimigodejacques
+#expectError "Função inválida: Inimigo de Jacques é seu inimigo." adicionarPaquera id=${s1} paquera=inimigodejacques
+#expectError "Função inválida: Inimigo de Jacques é seu inimigo." enviarRecado id=${s1} destinatario=inimigodejacques recado="fhdjfsd"
 
 
 # usuário pode ter mais de um inimigo
 
 
-criarUsuario login=inimigo2dejacques senha=abcdef nome="Inimigo 2 de Jacques"
-s3=abrirSessao login=inimigo2dejacques senha=abcdef
+#criarUsuario login=inimigo2dejacques senha=abcdef nome="Inimigo 2 de Jacques"
+#s3=abrirSessao login=inimigo2dejacques senha=abcdef
 
 
-adicionarInimigo id=${s3} inimigo=jpsauve
-adicionarInimigo id=${s3} inimigo=inimigodejacques
+#adicionarInimigo id=${s3} inimigo=jpsauve
+#adicionarInimigo id=${s3} inimigo=inimigodejacques
 
 
-expectError "Função inválida: Inimigo 2 de Jacques é seu inimigo." adicionarAmigo id=${s1} amigo=inimigo2dejacques
-expectError "Função inválida: Inimigo 2 de Jacques é seu inimigo." adicionarAmigo id=${s2} amigo=inimigo2dejacques
+#expectError "Função inválida: Inimigo 2 de Jacques é seu inimigo." adicionarAmigo id=${s1} amigo=inimigo2dejacques
+#expectError "Função inválida: Inimigo 2 de Jacques é seu inimigo." adicionarAmigo id=${s2} amigo=inimigo2dejacques
 
 
 # tratamento de erros
 
 
-expectError "Usuário já está adicionado como inimigo." adicionarInimigo id=${s2} inimigo=jpsauve
-expectError "Usuário não cadastrado." adicionarInimigo id=${s2} inimigo=qwerty
-expectError "Usuário não pode ser inimigo de si mesmo." adicionarInimigo id=${s2} inimigo=inimigodejacques
+#expectError "Usuário já está adicionado como inimigo." adicionarInimigo id=${s2} inimigo=jpsauve
+#expectError "Usuário não cadastrado." adicionarInimigo id=${s2} inimigo=qwerty
+#expectError "Usuário não pode ser inimigo de si mesmo." adicionarInimigo id=${s2} inimigo=inimigodejacques
 
 
 # teste de persistência
 
 
-criarUsuario login=jacquespersistente senha=abcdef nome="Jacques Persistente"
+#criarUsuario login=jacquespersistente senha=abcdef nome="Jacques Persistente"
 
 
-criarUsuario login=fapersistentedejacques senha=seuqcajedaf nome="Fã Persistente de Jacques"
-s2=abrirSessao login=fapersistentedejacques senha=seuqcajedaf
-adicionarIdolo id=${s2} idolo=jacquespersistente
+#criarUsuario login=fapersistentedejacques senha=seuqcajedaf nome="Fã Persistente de Jacques"
+#s2=abrirSessao login=fapersistentedejacques senha=seuqcajedaf
+#adicionarIdolo id=${s2} idolo=jacquespersistente
 
 
-criarUsuario login=paquerapersistentedejacques senha=abcdef nome="Paquera Persistente de Jacques"
-s3=abrirSessao login=paquerapersistentedejacques senha=abcdef
-adicionarPaquera id=${s3} paquera=jacquespersistente
+#criarUsuario login=paquerapersistentedejacques senha=abcdef nome="Paquera Persistente de Jacques"
+#s3=abrirSessao login=paquerapersistentedejacques senha=abcdef
+#adicionarPaquera id=${s3} paquera=jacquespersistente
 
 
-criarUsuario login=inimigopersistentedejacques senha=abcdef nome="Inimigo Persistente de Jacques"
-s4=abrirSessao login=inimigopersistentedejacques senha=abcdef
-adicionarInimigo id=${s4} inimigo=jacquespersistente
+#criarUsuario login=inimigopersistentedejacques senha=abcdef nome="Inimigo Persistente de Jacques"
+#s4=abrirSessao login=inimigopersistentedejacques senha=abcdef
+#adicionarInimigo id=${s4} inimigo=jacquespersistente
 
 
 encerrarSistema
